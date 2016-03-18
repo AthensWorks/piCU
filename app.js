@@ -1,22 +1,18 @@
-var gpio = require('rpi-gpio');
- 
+var optional = require('optional');
 
-gpio.on('change', function(channel, value) {
-    console.log('Channel ' + channel + ' value is now ' + value);
-});
-gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH);
+var gpio = optional('rpi-gpio'); // optionally includes the rpi-gpio
 
+function updateState(channel, value) {
+  if (channel === 11) {
+    console.log(value);
+  }
+}
 
-//gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH, readInput);
- 
-//function readInput() {
-//    gpio.read(11, function(err, value) {
-//	if( err !== null ) {
-//		console.log(err);
-//	}
-//       console.log('The value is ' + value);
-
-//	readInput();
-//    });
-//}
-
+if (gpio !== null) {
+  gpio.on('change', updateState());
+  gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH);
+} else {
+  setInterval(function(){
+    updateState(11, Boolean(Math.floor(Math.random()*2)));
+  }, 3000);
+}
