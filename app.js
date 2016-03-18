@@ -21,7 +21,7 @@ function updateState(channel, value) {
 }
 
 if (gpio !== null) {
-  gpio.on('change', updateState());
+  gpio.on('change', updateState);
   gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH);
 } else {
   setInterval(function() {
